@@ -10,6 +10,7 @@ namespace HW7SkillFactory
     {
         static void Main(string[] args)
         {
+            // см. Delivery.cs
         }
     }
 }

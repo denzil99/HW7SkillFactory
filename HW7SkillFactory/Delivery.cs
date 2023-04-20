@@ -9,85 +9,196 @@ namespace HW7SkillFactory
 
     class HomeDelivery : Delivery
     {
-        /* ... */
+
     }
 
     class PickPointDelivery : Delivery
     {
-        /* ... */
+        public string pickPointAdress;
+
+        private string PickPointAdress
+        {
+            get { return pickPointAdress; }
+            set
+            {
+                switch (value)
+                {
+                    case "Alekseevskaya":
+                        pickPointAdress = "Alekseevskaya";
+                        break;
+                    case "Semyonovskaya":
+                        pickPointAdress = "Semyonovskaya";
+                        break;
+                    case "Avtozavodskaya":
+                        pickPointAdress = "Avtozavodskaya";
+                        break;
+                    case "Planernaya":
+                        pickPointAdress = "Planernaya";
+                        break;
+                    default:
+                        Console.WriteLine("По этому адресу нет постамата");
+                        break;
+
+                }
+            }
+
+        }
     }
 
     class ShopDelivery : Delivery
     {
-        /* ... */
+        public string shopAdress;
+
+        private string ShopAdress
+        {
+            get { return shopAdress; }
+            set
+            {
+                switch (value)
+                {
+                    case "Alekseevskaya":
+                        shopAdress = "Alekseevskaya";
+                        break;
+                    case "Semyonovskaya":
+                        shopAdress = "Semyonovskaya";
+                        break;
+                    case "Avtozavodskaya":
+                        shopAdress = "Avtozavodskaya";
+                        break;
+                    case "Planernaya":
+                        shopAdress = "Planernaya";
+                        break;
+                    default:
+                        Console.WriteLine("По этому адресу нет магазина");
+                        break;
+
+                }
+            }
+
+        }
     }
 
     abstract class Product
     {
-        public string name;
-        public string Name
+        public string type;
+        public string Type
         {
-            get { return name; }
-            set { name = value; }
+            get { return type; }
+            set { type = value; }
         }
 
-
-
-        public virtual void CallTheProduct(string name)
-        {
-            Console.WriteLine($"{name}");
-        }
         public Product()
         {
 
         }
     }
 
-    class FromMilk : Product
+    class ContainsMilk : Product
     {
-        public static string Type;
+        public static string Girnost;
 
+       
+        public virtual void CallTheProduct()
+        {
+            Console.WriteLine("Молокосодержащий продукт");
+        }
+    }
+
+    class Cheese : ContainsMilk
+    {
+        public int ammount;
+
+        public int Ammount
+        {
+            get
+            {
+                return ammount;
+            }
+            private set 
+            {
+                if (value <= 0) { Console.WriteLine("Не достаточно единиц на складе"); }
+                else { value = ammount; }
+
+            }
+        }
+
+        private void AddedToOrder(int amm)
+        {
+            Ammount -= amm;
+        }
+
+        public override void CallTheProduct()
+        {
+            base.CallTheProduct(); // Необязательное. Напишет: "Молокосодержащий продукт"
+            Console.WriteLine("сыр");
+        }
+    }
+
+    class Kefir : ContainsMilk
+    {
+        public override void CallTheProduct()
+        {
+            base.CallTheProduct(); // Необязательное. Напишет: "Молокосодержащий продукт"
+            Console.WriteLine("Кефир");
+        }
 
     }
 
-    class Cheese : FromMilk
+    class Fruit : Product { }
+
+    class Apple : Fruit { }
+
+    class Cart
     {
-        public int ammount = 100;
-        public string Ammount
+        private Product[] collection; // содержит Product p = new Apple/Cheese/Kefir ()
+
+        public Cart(Product[] collection)
         {
-            get { return ammount; }
-            private set {
-                if (ammount > 0)
+            this.collection = collection;
+        }
+
+        public Product this[int index]
+        {
+            get
+            {
+                if (index >= 0 && index < collection.Length)
                 {
-                    //если меньше 
-                    ammount--;
+                    return collection[index];
                 }
                 else
                 {
-                    //если меньше 0 вернуть предупреждение
+                    return null;
                 }
             }
         }
-        private int AddedToOrder(int amm)
-        {
 
-        }
+    }
+    class Gift
+    {
+        public Gift() { }
     }
 
     class Order<TDelivery,
     TStruct> where TDelivery : Delivery
     {
-        public TDelivery Delivery;
+        public TDelivery Delivery; 
 
         public int Number;
 
         public string Description;
+        public Cart cart;
+        public Gift gift = new Gift();
 
         public void DisplayAddress()
         {
             Console.WriteLine(Delivery.Address);
         }
 
-        // ... Другие поля
+        public Order(TDelivery del, Product[] collection) 
+        {
+            Delivery = del;
+            cart = new Cart(collection);
+            this.gift = gift;
+        }
     }
 }
