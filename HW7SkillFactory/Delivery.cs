@@ -80,7 +80,7 @@ namespace HW7SkillFactory
 
     abstract class Product
     {
-        public string type;
+        private string type;
         public string Type
         {
             get { return type; }
@@ -181,7 +181,7 @@ namespace HW7SkillFactory
     class Order<TDelivery,
     TStruct> where TDelivery : Delivery
     {
-        public TDelivery Delivery; 
+        public TDelivery Delivery;
 
         public int Number;
 
